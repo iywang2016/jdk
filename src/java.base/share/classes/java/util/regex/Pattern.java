@@ -25,6 +25,7 @@
 
 package java.util.regex;
 
+import org.checkerframework.checker.confidential.qual.PolyConfidential;
 import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nonempty.qual.EnsuresNonEmptyIf;
@@ -1192,7 +1193,7 @@ public final @UsesObjectEquals class Pattern
      * as in {@link #compile(String, int)}.
      */
     @SideEffectFree
-    public @PolyRegex Matcher matcher(@PolyRegex Pattern this, CharSequence input) {
+    public @PolyRegex @PolyConfidential Matcher matcher(@PolyRegex Pattern this, @PolyConfidential CharSequence input) {
         if (!compiled) {
             synchronized(this) {
                 if (!compiled)

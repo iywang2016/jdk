@@ -25,6 +25,7 @@
 
 package java.lang;
 
+import org.checkerframework.checker.confidential.qual.PolyConfidential;
 import org.checkerframework.checker.index.qual.GTENegativeOne;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.LTLengthOf;
@@ -140,7 +141,7 @@ public final class StringBuilder
      * @param   str   the initial contents of the buffer.
      */
     @IntrinsicCandidate
-    public StringBuilder(String str) {
+    public StringBuilder(@PolyConfidential String str) {
         super(str);
     }
 

@@ -25,6 +25,7 @@
 
 package java.lang;
 
+import org.checkerframework.checker.confidential.qual.PolyConfidential;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -114,7 +115,7 @@ public abstract class Enum<E extends Enum<E>>
      * @return the name of this enum constant
      */
     @Pure
-    public final @PolyValue String name(@GuardedByUnknown @UnknownInitialization(java.lang.Enum.class) @PolyValue Enum<E> this) {
+    public final @PolyValue @PolyConfidential String name(@GuardedByUnknown @UnknownInitialization(java.lang.Enum.class) @PolyValue @PolyConfidential Enum<E> this) {
         return name;
     }
 
@@ -303,8 +304,8 @@ public abstract class Enum<E extends Enum<E>>
      *         is null
      * @since 1.5
      */
-    public static <T extends Enum<T>> @PolyValue T valueOf(Class<T> enumClass,
-                                                @PolyValue String name) {
+    public static <T extends Enum<T>> @PolyValue @PolyConfidentialT valueOf(Class<T> enumClass,
+                                                @PolyValue @PolyConfidential String name) {
         T result = enumClass.enumConstantDirectory().get(name);
         if (result != null)
             return result;
