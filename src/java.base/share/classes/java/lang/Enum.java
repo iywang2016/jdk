@@ -115,7 +115,7 @@ public abstract class Enum<E extends Enum<E>>
      * @return the name of this enum constant
      */
     @Pure
-    public final @PolyValue @PolyConfidential String name(@GuardedByUnknown @UnknownInitialization(java.lang.Enum.class) @PolyValue @PolyConfidential Enum<E> this) {
+    public final @PolyConfidential @PolyValue String name(@GuardedByUnknown @UnknownInitialization(java.lang.Enum.class) @PolyConfidential @PolyValue Enum<E> this) {
         return name;
     }
 
@@ -304,8 +304,8 @@ public abstract class Enum<E extends Enum<E>>
      *         is null
      * @since 1.5
      */
-    public static <T extends Enum<T>> @PolyValue @PolyConfidentialT valueOf(Class<T> enumClass,
-                                                @PolyValue @PolyConfidential String name) {
+    public static <T extends Enum<T>> @PolyConfidential @PolyValue T valueOf(Class<T> enumClass,
+                                                @PolyConfidential @PolyValue String name) {
         T result = enumClass.enumConstantDirectory().get(name);
         if (result != null)
             return result;
