@@ -1584,7 +1584,7 @@ public final class String
      */
     @Pure
     @StaticallyExecutable
-    public @LengthOf({"this"}) int length() {
+    public @LengthOf({"this"}) int length(@PolyConfidential String this) {
         return value.length >> coder();
     }
 
@@ -1603,7 +1603,7 @@ public final class String
     @EnsuresMinLenIf(expression="this", result=false, targetValue=1)
     @Override
     @EnsuresNonEmptyIf(result = false, expression = "this")
-    public boolean isEmpty() {
+    public boolean isEmpty(@PolyConfidential String this) {
         return value.length == 0;
     }
 
@@ -1627,7 +1627,7 @@ public final class String
      */
     @Pure
     @StaticallyExecutable
-    public char charAt(@IndexFor({"this"}) int index) {
+    public char charAt(@PolyConfidential String this, @IndexFor({"this"}) int index) {
         if (isLatin1()) {
             return StringLatin1.charAt(value, index);
         } else {
@@ -1903,7 +1903,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public @PolySigned byte[] getBytes(Charset charset) {
+    public @PolySigned byte[] getBytes(@PolyConfidential String this, Charset charset) {
         if (charset == null) throw new NullPointerException();
         return encode(charset, coder(), value);
      }
@@ -1924,7 +1924,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public @PolySigned byte[] getBytes() {
+    public @PolySigned byte[] getBytes(@PolyConfidential String this) {
         return encode(Charset.defaultCharset(), coder(), value);
     }
 
@@ -2088,7 +2088,7 @@ public final class String
     @Pure
     @EnsuresNonNullIf(expression={"#1"}, result=true)
     @StaticallyExecutable
-    public boolean equalsIgnoreCase(@Nullable String anotherString) {
+    public boolean equalsIgnoreCase(@PolyConfidential String this, @PolyConfidential @Nullable String anotherString) {
         return (this == anotherString) ? true
                 : (anotherString != null)
                 && (anotherString.length() == length())
@@ -2434,7 +2434,7 @@ public final class String
      */
     @Pure
     @StaticallyExecutable
-    public boolean startsWith(String prefix) {
+    public boolean startsWith(@PolyConfidential String this, @PolyConfidential String prefix) {
         return startsWith(prefix, 0);
     }
 
@@ -2653,7 +2653,7 @@ public final class String
      */
     @Pure
     @StaticallyExecutable
-    public @IndexOrLow({"this"}) int lastIndexOf(int ch) {
+    public @IndexOrLow({"this"}) int lastIndexOf(@PolyConfidential String this, int ch) {
         return lastIndexOf(ch, length() - 1);
     }
 
@@ -2938,7 +2938,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public String substring(@IndexOrHigh({"this"}) int beginIndex) {
+    public @PolyConfidential String substring(@PolyConfidential String this, @IndexOrHigh({"this"}) int beginIndex) {
         return substring(beginIndex, length());
     }
 
@@ -2966,7 +2966,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public String substring(@IndexOrHigh({"this"}) int beginIndex, @IndexOrHigh({"this"}) int endIndex) {
+    public @PolyConfidential String substring(@PolyConfidential String this, @IndexOrHigh({"this"}) int beginIndex, @IndexOrHigh({"this"}) int endIndex) {
         int length = length();
         checkBoundsBeginEnd(beginIndex, endIndex, length);
         if (beginIndex == 0 && endIndex == length) {
@@ -3033,7 +3033,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public String concat(String str) {
+    public @PolyConfidential String concat(@PolyConfidential String this, @PolyConfidential String str) {
         if (str.isEmpty()) {
             return this;
         }
@@ -3071,7 +3071,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public String replace(char oldChar, char newChar) {
+    public @PolyConfidential String replace(@PolyConfidential String this, char oldChar, char newChar) {
         if (oldChar != newChar) {
             String ret = isLatin1() ? StringLatin1.replace(value, oldChar, newChar)
                                     : StringUTF16.replace(value, oldChar, newChar);
@@ -3125,7 +3125,7 @@ public final class String
     @Pure
     @StaticallyExecutable
     @EnsuresNonEmptyIf(result = true, expression = "this")
-    public boolean contains(CharSequence s) {
+    public boolean contains(@PolyConfidential String this, @PolyConfidential CharSequence s) {
         return indexOf(s.toString()) >= 0;
     }
 
@@ -3217,7 +3217,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public String replaceAll(@Regex String regex, String replacement) {
+    public @PolyConfidential String replaceAll(@PolyConfidential String this, @Regex String regex, String replacement) {
         return Pattern.compile(regex).matcher(this).replaceAll(replacement);
     }
 
@@ -3235,7 +3235,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public String replace(@GuardSatisfied CharSequence target, @GuardSatisfied CharSequence replacement) {
+    public @PolyConfidential String replace(@PolyConfidential String this, @GuardSatisfied CharSequence target, @PolyConfidential @GuardSatisfied CharSequence replacement) {
         String trgtStr = target.toString();
         String replStr = replacement.toString();
         int thisLen = length();
@@ -3602,7 +3602,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public String @MinLen(1) [] split(@Regex String regex) {
+    public @PolyConfidential String @MinLen(1) [] split(@PolyConfidential String this, @Regex String regex) {
         return split(regex, 0, false);
     }
 
@@ -3633,7 +3633,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public static String join(CharSequence delimiter, CharSequence... elements) {
+    public static @PolyConfidential String join(CharSequence delimiter, @PolyConfidential CharSequence... elements) {
         var delim = delimiter.toString();
         var elems = new String[elements.length];
         for (int i = 0; i < elements.length; i++) {
@@ -3826,7 +3826,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public String toLowerCase() {
+    public @PolyConfidential String toLowerCase(@PolyConfidential String this) {
         return toLowerCase(Locale.getDefault());
     }
 
@@ -3910,7 +3910,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public String toUpperCase() {
+    public @PolyConfidential String toUpperCase(@PolyConfidential String this) {
         return toUpperCase(Locale.getDefault());
     }
 
@@ -3948,7 +3948,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public String trim() {
+    public @PolyConfidential String trim(@PolyConfidential String this) {
         String ret = isLatin1() ? StringLatin1.trim(value)
                                 : StringUTF16.trim(value);
         return ret == null ? this : ret;
@@ -3982,7 +3982,7 @@ public final class String
      */
     @SideEffectFree
     @StaticallyExecutable
-    public String strip() {
+    public @PolyConfidential String strip(@PolyConfidential String this) {
         String ret = isLatin1() ? StringLatin1.strip(value)
                                 : StringUTF16.strip(value);
         return ret == null ? this : ret;
@@ -4486,7 +4486,7 @@ public final class String
      */
     @Pure
     @StaticallyExecutable
-    public @SameLen({"this"}) @PolyRegex @PolyValue String toString(@PolyRegex @PolyValue String this) {
+    public @SameLen({"this"}) @PolyRegex @PolyValue @PolyConfidential String toString(@PolyRegex @PolyValue @PolyConfidential String this) {
         return this;
     }
 
@@ -4501,7 +4501,7 @@ public final class String
      */
     @SideEffectFree
     @Override
-    public IntStream chars() {
+    public IntStream chars(@PolyConfidential String this) {
         return StreamSupport.intStream(
             isLatin1() ? new StringLatin1.CharsSpliterator(value, Spliterator.IMMUTABLE)
                        : new StringUTF16.CharsSpliterator(value, Spliterator.IMMUTABLE),
